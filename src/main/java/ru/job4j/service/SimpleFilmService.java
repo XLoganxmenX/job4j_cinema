@@ -1,5 +1,6 @@
 package ru.job4j.service;
 
+import org.springframework.stereotype.Service;
 import ru.job4j.dto.FilmDto;
 import ru.job4j.model.Film;
 import ru.job4j.model.Genre;
@@ -10,13 +11,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class SimpleFilmService implements FilmService {
     private final FilmRepository filmRepository;
     private final GenreRepository genreRepository;
 
-    public SimpleFilmService(FilmRepository filmRepository, GenreRepository genreRepository) {
-        this.filmRepository = filmRepository;
-        this.genreRepository = genreRepository;
+    public SimpleFilmService(FilmRepository sql2oFilmRepository, GenreRepository sql2oGenreRepository) {
+        this.filmRepository = sql2oFilmRepository;
+        this.genreRepository = sql2oGenreRepository;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package ru.job4j.repository;
 
+import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.job4j.model.Hall;
 import java.util.Optional;
 
+@Repository
 public class Sql2oHallRepository implements HallRepository {
     private final Sql2o sql2o;
 

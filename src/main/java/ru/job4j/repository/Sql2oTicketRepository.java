@@ -2,6 +2,7 @@ package ru.job4j.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 import ru.job4j.model.Ticket;
@@ -9,6 +10,7 @@ import ru.job4j.model.Ticket;
 import java.util.Collection;
 import java.util.Optional;
 
+@Repository
 public class Sql2oTicketRepository implements TicketRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(Sql2oUserRepository.class);
     private final Sql2o sql2o;
