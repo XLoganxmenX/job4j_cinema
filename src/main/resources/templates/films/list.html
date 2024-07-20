@@ -16,7 +16,7 @@
     <header th:insert="blocks/header :: header"></header>
     <div class="container">
         <div class="row">
-            <table class="table">
+            <table class="table table-stripped">
                 <thead>
                 <tr>
                     <th scope="col">Название</th>
@@ -27,12 +27,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                  <tr th:each="filmDto: ${filmsDto}}">
+                  <tr th:each="filmDto: ${filmsDto}">
                     <td th:text="${filmDto.name}" />
-                    <td th:text="${film.genre}" />
-                    <td th:text="${film.year}" />
-                    <td th:text="${film.minimalAge}" />
-                    <td th:text="${film.durationInMinutes}" />
+                    <td th:text="${filmDto.genre}" />
+                    <td th:text="${filmDto.year}" />
+                    <td th:text="${filmDto.minimalAge}" />
+                    <td th:text="${filmDto.durationInMinutes}" />
                 </tr>
                 </tbody>
             </table>
