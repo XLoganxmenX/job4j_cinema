@@ -1,5 +1,7 @@
 package ru.job4j.dto;
 
+import ru.job4j.model.FilmSession;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -21,6 +23,15 @@ public class FilmSessionDto {
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
+    }
+
+    public FilmSessionDto(FilmSession filmSession, String hallName, String filmName) {
+        this.id = filmSession.getId();
+        this.hallName = hallName;
+        this.filmName = filmName;
+        this.startTime = filmSession.getStartTime();
+        this.endTime = filmSession.getEndTime();
+        this.price = filmSession.getPrice();
     }
 
     public int getId() {
