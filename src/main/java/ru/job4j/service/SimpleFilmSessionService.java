@@ -34,8 +34,12 @@ public class SimpleFilmSessionService implements FilmSessionService {
         }
         FilmSession filmSession = optionalFilmSession.get();
         String hallName = getHallNameById(filmSession.getHallsId());
-        String filmName = getFilmNameById(filmSession.getFilmId());
-        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession, hallName, filmName);
+        Optional<Film> optionalFilm = filmRepository.findById(filmSession.getFilmId());
+        if (optionalFilm.isEmpty()) {
+            return Optional.empty();
+        }
+        Film film = optionalFilm.get();
+        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession, hallName, film.getId(), film.getName());
         return Optional.of(filmSessionDto);
     }
 
@@ -44,18 +48,16 @@ public class SimpleFilmSessionService implements FilmSessionService {
         return optionalHall.isPresent() ? optionalHall.get().getName() : "Неизвестный зал";
     }
 
-    private String getFilmNameById(int id) {
-        Optional<Film> optionalFilm = filmRepository.findById(id);
-        return optionalFilm.isPresent() ? optionalFilm.get().getName() : "Неизвестный фильм";
-    }
-
     @Override
     public Collection<FilmSessionDto> findAll() {
         Collection<FilmSessionDto> filmSessionDtoCollection = new ArrayList<>();
         filmSessionRepository.findAll().forEach(filmSession -> {
             String hallName = getHallNameById(filmSession.getHallsId());
-            String filmName = getFilmNameById(filmSession.getFilmId());
-            filmSessionDtoCollection.add(new FilmSessionDto(filmSession, hallName, filmName));
+            Optional<Film> optionalFilm = filmRepository.findById(filmSession.getFilmId());
+            if (optionalFilm.isPresent()) {
+                Film film = optionalFilm.get();
+                filmSessionDtoCollection.add(new FilmSessionDto(filmSession, hallName, film.getId(), film.getName()));
+            }
         });
         return filmSessionDtoCollection;
     }

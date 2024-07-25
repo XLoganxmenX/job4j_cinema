@@ -8,6 +8,7 @@ import java.util.Objects;
 public class FilmSessionDto {
     int id;
     private String hallName;
+    private int filmId;
     private String filmName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -16,18 +17,21 @@ public class FilmSessionDto {
     public FilmSessionDto() {
     }
 
-    public FilmSessionDto(int id, String hallName, String filmName, LocalDateTime startTime, LocalDateTime endTime, int price) {
+    public FilmSessionDto(int id, String hallName, int filmId, String filmName,
+                          LocalDateTime startTime, LocalDateTime endTime, int price) {
         this.id = id;
         this.hallName = hallName;
+        this.filmId = filmId;
         this.filmName = filmName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
     }
 
-    public FilmSessionDto(FilmSession filmSession, String hallName, String filmName) {
+    public FilmSessionDto(FilmSession filmSession, String hallName, int filmId, String filmName) {
         this.id = filmSession.getId();
         this.hallName = hallName;
+        this.filmId = filmId;
         this.filmName = filmName;
         this.startTime = filmSession.getStartTime();
         this.endTime = filmSession.getEndTime();
@@ -48,6 +52,14 @@ public class FilmSessionDto {
 
     public void setHallName(String hallName) {
         this.hallName = hallName;
+    }
+
+    public int getFilmId() {
+        return filmId;
+    }
+
+    public void setFilmId(int filmId) {
+        this.filmId = filmId;
     }
 
     public String getFilmName() {
