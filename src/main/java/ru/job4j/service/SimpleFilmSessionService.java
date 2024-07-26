@@ -1,28 +1,30 @@
 package ru.job4j.service;
 
 import org.springframework.stereotype.Service;
+import ru.job4j.dto.FilmDto;
 import ru.job4j.dto.FilmSessionDto;
+import ru.job4j.dto.FilmSessionPageDto;
 import ru.job4j.model.Film;
 import ru.job4j.model.FilmSession;
 import ru.job4j.model.Hall;
-import ru.job4j.repository.FilmRepository;
 import ru.job4j.repository.FilmSessionRepository;
 import ru.job4j.repository.HallRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SimpleFilmSessionService implements FilmSessionService {
     private final FilmSessionRepository filmSessionRepository;
-    private final FilmRepository filmRepository;
+    private final FilmService filmService;
     private final HallRepository hallRepository;
 
-    public SimpleFilmSessionService(FilmSessionRepository sql2oFilmSessionRepository,
-                                    FilmRepository sql2oFilmRepository, HallRepository sql2oHallRepository) {
+    public SimpleFilmSessionService(FilmSessionRepository sql2oFilmSessionRepository, FilmService filmService,
+                                    HallRepository sql2oHallRepository) {
         this.filmSessionRepository = sql2oFilmSessionRepository;
-        this.filmRepository = sql2oFilmRepository;
+        this.filmService = filmService;
         this.hallRepository = sql2oHallRepository;
     }
 
@@ -34,12 +36,11 @@ public class SimpleFilmSessionService implements FilmSessionService {
         }
         FilmSession filmSession = optionalFilmSession.get();
         String hallName = getHallNameById(filmSession.getHallsId());
-        Optional<Film> optionalFilm = filmRepository.findById(filmSession.getFilmId());
-        if (optionalFilm.isEmpty()) {
+        Optional<FilmDto> optionalFilmDto = filmService.findById(filmSession.getFilmId());
+        if (optionalFilmDto.isEmpty()) {
             return Optional.empty();
         }
-        Film film = optionalFilm.get();
-        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession, hallName, film.getId(), film.getName());
+        FilmSessionDto filmSessionDto = new FilmSessionDto(filmSession, hallName, optionalFilmDto.get());
         return Optional.of(filmSessionDto);
     }
 
@@ -49,15 +50,29 @@ public class SimpleFilmSessionService implements FilmSessionService {
     }
 
     @Override
-    public Collection<FilmSessionDto> findAll() {
+    public Optional<FilmSessionPageDto> getFilmSessionPageById(int id) {
+        Optional<FilmSessionDto> optionalFilmSessionDto = findById(id);
+        if (optionalFilmSessionDto.isEmpty()) {
+            return Optional.empty();
+        }
+        FilmSessionDto filmSessionDto = optionalFilmSessionDto.get();
+        Optional<FilmSession> optionalFilmSession = filmSessionRepository.findById(id);
+        Hall hall = hallRepository.findById(optionalFilmSession.get().getHallsId()).get();
+        FilmSessionPageDto filmSessionPageDto = new FilmSessionPageDto(
+                filmSessionDto.getId(), filmSessionDto,
+                hall.getRowCount(), hall.getPlaceCount()
+        );
+        return Optional.of(filmSessionPageDto);
+    }
+
+    @Override
+    public Collection<FilmSessionDto> findAllFilmSessionDto() {
         Collection<FilmSessionDto> filmSessionDtoCollection = new ArrayList<>();
         filmSessionRepository.findAll().forEach(filmSession -> {
             String hallName = getHallNameById(filmSession.getHallsId());
-            Optional<Film> optionalFilm = filmRepository.findById(filmSession.getFilmId());
-            if (optionalFilm.isPresent()) {
-                Film film = optionalFilm.get();
-                filmSessionDtoCollection.add(new FilmSessionDto(filmSession, hallName, film.getId(), film.getName()));
-            }
+            Optional<FilmDto> optionalFilmDto = filmService.findById(filmSession.getFilmId());
+            optionalFilmDto.ifPresent(filmDto ->
+                    filmSessionDtoCollection.add(new FilmSessionDto(filmSession, hallName, filmDto)));
         });
         return filmSessionDtoCollection;
     }
