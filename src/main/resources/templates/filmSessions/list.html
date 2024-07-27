@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="filmSessionDto: ${filmSessionsDto}">
-                    <td><a th:text="${filmSessionDto.filmName}" th:href="@{/filmSessions/{filmSessionDtoId}(filmSessionDtoId=${filmSessionDto.id})}"></a></td>
+                    <td><a th:text="${filmSessionDto.filmDto.name}" th:href="@{/filmSessions/{filmSessionDtoId}(filmSessionDtoId=${filmSessionDto.id})}"></a></td>
                     <td th:text="${filmSessionDto.hallName}" />
                     <td th:text="${#temporals.format(filmSessionDto.startTime, 'hh:mm dd-MM-yyyy')}" />
                     <td th:text="${#temporals.format(filmSessionDto.endTime, 'hh:mm dd-MM-yyyy')}" />
