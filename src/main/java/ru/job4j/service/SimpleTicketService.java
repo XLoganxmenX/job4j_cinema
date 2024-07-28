@@ -1,11 +1,13 @@
 package ru.job4j.service;
 
+import org.springframework.stereotype.Service;
 import ru.job4j.model.Ticket;
 import ru.job4j.repository.TicketRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
 public class SimpleTicketService implements TicketService {
     private final TicketRepository ticketRepository;
 
