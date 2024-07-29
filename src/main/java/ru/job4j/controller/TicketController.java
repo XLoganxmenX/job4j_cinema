@@ -38,10 +38,9 @@ public class TicketController {
             );
             return "/tickets/invalid";
         }
-        model.addAttribute("message", String.format("""
-                   Покупка билета произведена успешно! Ваш билет: %d ряд, %d место.
-                   """,
-                selectedRow, selectedPlace)
+        model.addAttribute("message", "Покупка билета произведена успешно!");
+        model.addAttribute("ticket",
+                String.format("Ваш билет: %d ряд, %d место.", selectedRow, selectedPlace)
         );
         return "/tickets/success";
     }

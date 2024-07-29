@@ -16,10 +16,13 @@
     <header th:insert="blocks/header :: header"></header>
     <div class="container">
         <div class="mt-3 row justify-content-center">
-            <h1>SUCCESS IMAGE</h1>
+            <img th:src="@{/files/6}" class="w-25" alt="No image">
         </div>
         <div class="mt-3 row justify-content-center">
             <h3>[[${message}]]</h3>
+        </div>
+        <div class="mt-3 row justify-content-center">
+            <h3>[[${ticket}]]</h3>
         </div>
     </div>
     <footer th:insert="blocks/footer :: footer"></footer>
