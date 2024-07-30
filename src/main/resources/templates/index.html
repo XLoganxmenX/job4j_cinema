@@ -15,12 +15,22 @@
 <body>
 <div class="container-fluid p-0">
     <header th:insert="blocks/header :: header"></header>
-    <div class="container mt-2">
-        <h3>Проект сайта кинотеатра - job4j_cinema</h3>
-        <ul>
-
-        </ul>
+    <div class="mt-3 row">
+        <div class="col-md-4 justify-content-center">
+            <img th:src="@{/files/7}" class="img-fluid rounded w-50 float-right img-thumbnail">
+        </div>
+        <div class="col-md-6">
+            <h3>Проект сайта кинотеатра - job4j_cinema</h3>
+            <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a th:href="@{/films}">Кинотека</a></li>
+                <li><a th:href="@{/filmSessions}">Сеансы</a></li>
+                <li><a th:href="@{/users/register}">Регистрация</a></li>
+                <li><a th:href="@{/users/login}">Войти</a></li>
+            </ul>
+        </div>
     </div>
+
     <footer th:insert="blocks/footer :: footer"></footer>
 </div>
 </body>
