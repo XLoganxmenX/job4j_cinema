@@ -4,28 +4,25 @@ import org.springframework.stereotype.Service;
 import ru.job4j.dto.FilmDto;
 import ru.job4j.dto.FilmSessionDto;
 import ru.job4j.dto.FilmSessionPageDto;
-import ru.job4j.model.Film;
 import ru.job4j.model.FilmSession;
 import ru.job4j.model.Hall;
 import ru.job4j.repository.FilmSessionRepository;
-import ru.job4j.repository.HallRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SimpleFilmSessionService implements FilmSessionService {
     private final FilmSessionRepository filmSessionRepository;
     private final FilmService filmService;
-    private final HallRepository hallRepository;
+    private final HallService hallService;
 
     public SimpleFilmSessionService(FilmSessionRepository sql2oFilmSessionRepository, FilmService filmService,
-                                    HallRepository sql2oHallRepository) {
+                                    HallService hallService) {
         this.filmSessionRepository = sql2oFilmSessionRepository;
         this.filmService = filmService;
-        this.hallRepository = sql2oHallRepository;
+        this.hallService = hallService;
     }
 
     @Override
@@ -45,7 +42,7 @@ public class SimpleFilmSessionService implements FilmSessionService {
     }
 
     private String getHallNameById(int id) {
-        Optional<Hall> optionalHall = hallRepository.findById(id);
+        Optional<Hall> optionalHall = hallService.findById(id);
         return optionalHall.isPresent() ? optionalHall.get().getName() : "Неизвестный зал";
     }
 
@@ -57,7 +54,7 @@ public class SimpleFilmSessionService implements FilmSessionService {
         }
         FilmSessionDto filmSessionDto = optionalFilmSessionDto.get();
         Optional<FilmSession> optionalFilmSession = filmSessionRepository.findById(id);
-        Hall hall = hallRepository.findById(optionalFilmSession.get().getHallsId()).get();
+        Hall hall = hallService.findById(optionalFilmSession.get().getHallsId()).get();
         FilmSessionPageDto filmSessionPageDto = new FilmSessionPageDto(
                 filmSessionDto.getId(), filmSessionDto,
                 hall.getRowCount(), hall.getPlaceCount()
