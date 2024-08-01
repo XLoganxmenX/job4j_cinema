@@ -51,7 +51,6 @@ class Sql2oFilmRepositoryTest {
         }
     }
 
-
     @AfterEach
     public void deleteAllFromTables() {
         try (var connection = sql2o.open()) {

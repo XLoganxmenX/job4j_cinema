@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sql2o.Sql2o;
 import ru.job4j.configuration.DatasourceConfiguration;
-import ru.job4j.model.Film;
 import ru.job4j.model.FilmSession;
 
 import java.time.LocalDateTime;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.*;
+
 
 class Sql2oFilmSessionRepositoryTest {
     private static Sql2oFilmSessionRepository sql2oFilmSessionRepository;

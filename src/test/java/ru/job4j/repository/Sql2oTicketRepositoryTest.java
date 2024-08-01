@@ -30,14 +30,45 @@ class Sql2oTicketRepositoryTest {
         var datasource = configuration.connectionPool(url, username, password);
         sql2o = configuration.databaseClient(datasource);
         sql2oTicketRepository = new Sql2oTicketRepository(sql2o);
+    }
 
+    @BeforeEach
+    public void insertTables() {
+        try (var connection = sql2o.open()) {
+            connection.createQuery("""
+                 INSERT INTO genres (id, name)
+                 VALUES (1, 'genre')
+                 """).executeUpdate();
+            connection.createQuery("""
+                 INSERT INTO files (id, name, path)
+                 VALUES (1, 'file', 'path')
+                 """).executeUpdate();
+            connection.createQuery("""
+                 INSERT INTO films (id, name, description, "year", genre_id, minimal_age, duration_in_minutes, file_id)
+                 VALUES (1, 'film1', 'film1', 2000, 1, 18, 60, 1)
+                 """).executeUpdate();
+            connection.createQuery("""
+                 INSERT INTO halls (id, name, row_count, place_count, description)
+                 VALUES (1, 'RED', 10, 10, 'RED')
+                 """).executeUpdate();
+            connection.createQuery("""
+                 INSERT INTO film_sessions (id, film_id, halls_id, start_time, end_time, price)
+                 VALUES (1, 1, 1, '2000-01-01 00:00:00', '2000-01-01 01:00:00', 100),
+                        (2, 1, 1, '2000-01-02 00:00:00', '2000-01-02 02:00:00', 200),
+                        (3, 1, 1, '2000-01-03 00:00:00', '2000-01-03 03:00:00', 300)
+                 """).executeUpdate();
+        }
     }
 
     @AfterEach
-    public void clearTickets() {
-        var tickets = sql2oTicketRepository.findAll();
-        for (var ticket : tickets) {
-            sql2oTicketRepository.deleteById(ticket.getId());
+    public void deleteAllFromTables() {
+        try (var connection = sql2o.open()) {
+            connection.createQuery("DELETE FROM tickets").executeUpdate();
+            connection.createQuery("DELETE FROM film_sessions").executeUpdate();
+            connection.createQuery("DELETE FROM halls").executeUpdate();
+            connection.createQuery("DELETE FROM films").executeUpdate();
+            connection.createQuery("DELETE FROM genres").executeUpdate();
+            connection.createQuery("DELETE FROM files").executeUpdate();
         }
     }
 
@@ -61,9 +92,9 @@ class Sql2oTicketRepositoryTest {
 
     @Test
     public void whenSaveSeveralAndGetAll() {
-        var ticket1 = sql2oTicketRepository.save(new Ticket(0, 1, 10, 10, 1)).get();
-        var ticket2 = sql2oTicketRepository.save(new Ticket(0, 2, 10, 10, 1)).get();
-        var ticket3 = sql2oTicketRepository.save(new Ticket(0, 3, 10, 10, 1)).get();
+        var ticket1 = sql2oTicketRepository.save(new Ticket(0, 1, 1, 2, 1)).get();
+        var ticket2 = sql2oTicketRepository.save(new Ticket(0, 2, 3, 4, 1)).get();
+        var ticket3 = sql2oTicketRepository.save(new Ticket(0, 3, 5, 6, 1)).get();
         var result = sql2oTicketRepository.findAll();
 
         assertThat(result).isEqualTo(List.of(ticket1, ticket2, ticket3));

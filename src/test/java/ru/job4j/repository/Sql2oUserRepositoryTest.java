@@ -2,6 +2,7 @@ package ru.job4j.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sql2o.Sql2o;
 import ru.job4j.configuration.DatasourceConfiguration;
@@ -33,7 +34,7 @@ class Sql2oUserRepositoryTest {
         sql2oUserRepository = new Sql2oUserRepository(sql2o);
     }
 
-    @AfterEach
+    @BeforeEach
     public void deleteAllFromTable() {
         try (var connection = sql2o.open()) {
             connection.createQuery("DELETE from users").executeUpdate();
